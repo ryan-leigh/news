@@ -28,6 +28,7 @@ const App = () => {
       });
     Axios.get('http://localhost:3000/publishers')
       .then(response => {
+        console.log(response.data)
         setPublishers(response.data);
         setSelectedPublishers(response.data);
       });
@@ -41,19 +42,25 @@ const App = () => {
   // inlude whitelisted publishers and don't include publishers striked by the user
   useEffect(() => {
     const newSelectedPublishers = [];
-    for (let i = 0; i < topics.length; i++) {
-      for (let j = 0; j < topics[i].publishers; j++) {
-        if (!userStrikedPublishers.includes(topics[i].publishers[j]))
-        newSelectedPublishers.push(topics[i].publishers[j]);
+    for (let i = 0; i < selectedTopics.length; i++) {
+      console.log(i, ' ', selectedTopics[i]);
+      for (let j = 0; j < selectedTopics[i].publishers.length; j++) {
+        console.log('striked ', userStrikedPublishers);
+        if (!(userStrikedPublishers.includes(selectedTopics[i].publishers[j]))) {
+          console.log('pushing')
+          newSelectedPublishers.push(selectedTopics[i].publishers[j]);
+        }
       }
     }
     for (let i = 0; i < userWhitelistedPublishers; i++) {
-      if (!newSelectedPublishers.includes(userWhitelistedPublishers[i])) {
+      if (!(newSelectedPublishers.includes(userWhitelistedPublishers[i]))) {
         newSelectedPublishers.push(userWhitelistedPublishers[i]);
       }
     }
     setSelectedPublishers(newSelectedPublishers.sort())
   }, [selectedTopics])
+
+  console.log('selected: ', selectedPublishers);
 
   return (
     <div className="page_columns">

@@ -1,13 +1,11 @@
 import React from 'react';
-const {useState} = React;
+const {useState, useEffect} = React;
 
 const Publisher = ({publisher, index, selectedPublishers, setSelectedPublishers, userStrikedPublishers, setUserStrikedPublishers, userWhitelistedPublishers, setUserWhitelistedPublishers}) => {
 
-  const [isSelected, setIsSelected] = useState(selectedPublishers.includes(publisher));
-
   const handleClick = (e) => {
 
-    if (isSelected) {
+    if (selectedPublishers.includes(publisher)) {
 
       // Update user-striked publishers list
       const newUserStrikedPublishers = userStrikedPublishers.slice();
@@ -19,9 +17,6 @@ const Publisher = ({publisher, index, selectedPublishers, setSelectedPublishers,
       newSelectedPublishers.splice(selectedPublishers.indexOf(publisher), 1);
       setSelectedPublishers(newSelectedPublishers);
 
-      // Unselect publisher
-      setIsSelected(false);
-
     } else {
 
       // Update user-whitelisted publishers list
@@ -30,26 +25,24 @@ const Publisher = ({publisher, index, selectedPublishers, setSelectedPublishers,
       setUserWhitelistedPublishers(newUserWhitelistedPublishers);
 
       // Update selected publishers list
-      const newSelectedPublishers = selectedPublishers.slice().push(publisher);
+      const newSelectedPublishers = selectedPublishers.slice()
+      newSelectedPublishers.push(publisher);
       setSelectedPublishers(newSelectedPublishers);
-
-      // Select publisher
-      setIsSelected(true);
 
     }
 
   }
 
-  if (isSelected) {
+  if (selectedPublishers.includes(publisher)) {
     return (
       <span className="list_item" id={`publisher${index}`} onClick={(e) => handleClick(e)}>
-        {publisher.name}
+        {publisher}
       </span>
     )
   } else {
     return (
       <span className="list_item" id={`publisher${index}`} onClick={(e) => handleClick(e)} style={{textDecoration: 'line-through'}}>
-        {publisher.name}
+        {publisher}
       </span>
     )
   }

@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 
 console.log(process.env.DB_NAME);
 
-const connection = async () => {
-  await mongoose.connect(`mongodb://localhost:27017/${process.env.DB_NAME}`);
-}
+mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.DB_NAME}`)
+  .then(() => console.log('connected!'))
 
-connection();
+const dbExport = {};
+
 const articleSchema = new mongoose.Schema(
   {
     newsCatcherId: String,
@@ -26,15 +26,16 @@ const articleSchema = new mongoose.Schema(
 );
 const Article = new mongoose.model('Article', articleSchema);
 
-const publisherSchema = new mongoose.Schema(
+const topicSchema = new mongoose.Schema(
   {
     name: String,
-    cleanUrl: String,
+    publishers: Array,
   }
 )
-const Publisher = new mongoose.model('Publisher', publisherSchema);
+const Topic = new mongoose.model('Topic', topicSchema);
 
-module.exports = {
-  Article: Article,
-  Publisher: Publisher
-}
+dbExport.Article = Article;
+dbExport.Topic = Topic;
+console.log('after!');
+
+module.exports = dbExport;
