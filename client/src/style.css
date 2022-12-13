@@ -1,14 +1,16 @@
 body {
   font-family: 'Droid Serif', serif;
-  margin-left: 100px;
   color: #2f2f2f;
   /* justify-content: center; */
-  margin: auto;
-  margin-left: 200px;
+  /* margin: auto; */
+  /* margin-left: 200px; */
 }
+
+
 
 .whole {
   max-width: 75%;
+  margin: auto;
 }
 
 .page_title {
