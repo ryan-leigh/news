@@ -16,13 +16,13 @@ const Topic = ({topic, index, selectedTopics, setSelectedTopics}) => {
 
   if (selectedTopics.includes(topic)) {
     return (
-      <span className="list_item" id={`topic${index}`} onClick={handleClick}>
+      <span className="list_item" id={`topic${index}`} onClick={handleClick} style={{textDecoration: "underline", fontWeight: "bold"}}>
         {topic.name}
       </span>
     )
   } else {
     return (
-      <span className="list_item" id={`topic${index}`} onClick={handleClick} style={{textDecoration: "line-through"}}>
+      <span className="list_item" id={`topic${index}`} onClick={handleClick}>
         {topic.name}
       </span>
     )

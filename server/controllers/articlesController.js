@@ -3,7 +3,11 @@ const {Article} = require('../mongo.js');
 
 const articlesController = async (req, res) => {
   if (req.query.hasOwnProperty('topics')) {
-    await Article.find({'topic' : {$in : req.query.topics}, 'publisher': {$in : req.query.publishers}}).sort({published_date: -1}).limit(100)
+    console.log(req.query.topics);
+    console.log(req.query.publishers)
+    const topics = req.query.topics.split(',');
+    const publishers = req.query.publishers.split(',');
+    await Article.find({'topic' : {$in : topics}, 'publisher': {$in : publishers}}).sort({published_date: -1}).limit(100)
       .then((results) => {
         console.log('results: ', results);
         res.status(200);

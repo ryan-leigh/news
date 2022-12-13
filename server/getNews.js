@@ -55,7 +55,7 @@ const getNews = async () => {
 const timer = async () => {
   while (1 !== 0) {
     const currentTime = new Date();
-    if (currentTime.getMinutes() === 4 && currentTime.getSeconds() === 0) {
+    if (currentTime.getMinutes() === 25 && currentTime.getSeconds() === 0) {
       getNews();
       await sleep(2000);
     }

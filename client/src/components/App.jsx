@@ -8,6 +8,10 @@ import Feed from './Feed.jsx'
 const {useState, useEffect} = React;
 
 const App = () => {
+  const [loginPage, setLoginPage] = useState(true);
+  const [infoForm, setInfoForm] = useState(false);
+  const [topicsAndPublishersPage, setTopicsAndPublishersPage] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const [articles, setArticles] = useState([]);
   const [selectedArticles, setSelectedArticles] = useState([]);
   const [topics, setTopics] = useState([]);
@@ -24,13 +28,11 @@ const App = () => {
       .then(response => {
         console.log(response.data)
         setTopics(response.data);
-        setSelectedTopics(response.data);
       });
     Axios.get('http://localhost:3000/publishers')
       .then(response => {
         console.log(response.data)
         setPublishers(response.data);
-        setSelectedPublishers(response.data);
       });
     Axios.get(`http://localhost:3000/articles`)
       .then(response => {
@@ -38,7 +40,7 @@ const App = () => {
       });
   }, []);
 
-  // strikeout irrelevant publishers when selcted topics changes
+  // strikeout irrelevant publishers when selected topics changes
   // inlude whitelisted publishers and don't include publishers striked by the user
   useEffect(() => {
     const newSelectedPublishers = [];
@@ -52,7 +54,7 @@ const App = () => {
         }
       }
     }
-    for (let i = 0; i < userWhitelistedPublishers; i++) {
+    for (let i = 0; i < userWhitelistedPublishers.length; i++) {
       if (!(newSelectedPublishers.includes(userWhitelistedPublishers[i]))) {
         newSelectedPublishers.push(userWhitelistedPublishers[i]);
       }
@@ -62,17 +64,89 @@ const App = () => {
 
   console.log('selected: ', selectedPublishers);
 
-  return (
-    <div className="page_columns">
-      <Header />
-      <main>
-        <TopicsList topics={topics} selectedTopics={selectedTopics} setSelectedTopics={setSelectedTopics} />
-        <PublishersList publishers={publishers} selectedPublishers={selectedPublishers} setSelectedPublishers={setSelectedPublishers} userStrikedPublishers={userStrikedPublishers} setUserStrikedPublishers={setUserStrikedPublishers} userWhitelistedPublishers={userWhitelistedPublishers} setUserWhitelistedPublishers={setUserWhitelistedPublishers} />
-        <Update selectedTopics={selectedTopics} selectedPublishers={selectedPublishers} />
-        <Feed articles={articles} />
-      </main>
-    </div>
-  )
+  if (loggedIn) {
+    return (
+      <div className="whole">
+        <Header />
+        <div class="subhead">Wednesday November 23, 2022</div>
+        <main>
+          <div className="filter_list_heading">Topics</div>
+          <TopicsList topics={topics} selectedTopics={selectedTopics} setSelectedTopics={setSelectedTopics} />
+          <div className="filter_list_heading">Publishers</div>
+          <PublishersList publishers={publishers} selectedPublishers={selectedPublishers} setSelectedPublishers={setSelectedPublishers} userStrikedPublishers={userStrikedPublishers} setUserStrikedPublishers={setUserStrikedPublishers} userWhitelistedPublishers={userWhitelistedPublishers} setUserWhitelistedPublishers={setUserWhitelistedPublishers} />
+          <Update setArticles={setArticles} selectedTopics={selectedTopics} selectedPublishers={selectedPublishers} />
+          <Feed articles={articles} />
+        </main>
+      </div>
+    )
+  } else {
+    if (loginPage) {
+      return (
+        <div className="whole">
+          <Header />
+          <div class="subhead"></div>
+          <div style={{display: "flex", flexDirection: "column", marginTop: "30px"}}>
+            <div style={{display: 'flex', margin: "auto"}}>
+              <div>
+                <div style={{width: "80px"}}>Email</div><div><input type="text" /></div>
+                <div style={{width: "80px", marginTop: '10px'}}>Password</div><div><input type="password" /></div>
+                <button style={{marginTop: '10px'}} onClick={() => {
+                  setLoginPage(false);
+                  setLoggedIn(true);
+                }}>Login</button>
+              </div>
+              <div style={{position: "relative", width: "50px", margin: "50px"}}>
+                <div className="or">or</div>
+              </div>
+              <div style={{position: "relative", width: '147px'}}>
+                <button className="signup" onClick={() => {
+                  setLoginPage(false);
+                  setInfoForm(true);
+                }}>Sign up</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    } else if (infoForm) {
+      return (
+        <div className="whole">
+          <Header />
+          <div class="subhead"></div>
+          <div style={{display: "flex", flexDirection: "column", marginTop: "30px"}}>
+            <div style={{display: 'flex', margin: "auto"}}>
+              <div>
+                <div style={{width: "80px"}}>Email</div><div><input type="text" /></div>
+                <div style={{width: "80px", marginTop: '10px'}}>Create password</div><div><input type="password" /></div>
+                <button style={{marginTop: '10px'}} onClick={() => {
+                  setInfoForm(false);
+                  setTopicsAndPublishersPage(true);
+                }}>Continue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    } else if (topicsAndPublishersPage) {
+      return (
+        <div className="whole">
+          <Header />
+          <div class="subhead"></div>
+          <div style={{display: "flex", flexDirection: "column", marginTop: "30px"}}>
+            <div className="filter_list_heading">What interests you?</div>
+            <TopicsList topics={topics} selectedTopics={selectedTopics} setSelectedTopics={setSelectedTopics} />
+            <div className="filter_list_heading">Who do you want to hear from?</div>
+            <PublishersList publishers={publishers} selectedPublishers={selectedPublishers} setSelectedPublishers={setSelectedPublishers} userStrikedPublishers={userStrikedPublishers} setUserStrikedPublishers={setUserStrikedPublishers} userWhitelistedPublishers={userWhitelistedPublishers} setUserWhitelistedPublishers={setUserWhitelistedPublishers} />
+            <button onClick={() => {
+              setTopicsAndPublishersPage(false);
+              setLoggedIn(true);
+            }} style={{margin: "auto"}}>Sign up</button>
+          </div>
+        </div>
+      )
+
+    }
+  }
 }
 
 export default App;

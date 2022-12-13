@@ -35,13 +35,13 @@ const Publisher = ({publisher, index, selectedPublishers, setSelectedPublishers,
 
   if (selectedPublishers.includes(publisher)) {
     return (
-      <span className="list_item" id={`publisher${index}`} onClick={(e) => handleClick(e)}>
+      <span className="list_item" id={`publisher${index}`} onClick={(e) => handleClick(e)} style={{textDecoration: 'underline', fontWeight: "bold"}}>
         {publisher}
       </span>
     )
   } else {
     return (
-      <span className="list_item" id={`publisher${index}`} onClick={(e) => handleClick(e)} style={{textDecoration: 'line-through'}}>
+      <span className="list_item" id={`publisher${index}`} onClick={(e) => handleClick(e)} >
         {publisher}
       </span>
     )

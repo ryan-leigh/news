@@ -5,7 +5,7 @@ const {useState} = React;
 
 const Feed = ({articles}) => {
   return (
-    <div>
+    <div style={{marginTop: '50px'}}>
       {articles.map((article, index) => (
         <Article key={index} article={article} />
       ))}

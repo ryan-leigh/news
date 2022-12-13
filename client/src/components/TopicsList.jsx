@@ -3,11 +3,11 @@ import Topic from './Topic.jsx'
 
 const TopicsList = ({topics, selectedTopics, setSelectedTopics}) => {
   return (
-    <section className="filter_list">
+    <div className="filter_list">
       {topics.map((topic, index) => (
         <Topic key={index} topic={topic} index={index} selectedTopics={selectedTopics} setSelectedTopics={setSelectedTopics} />
       ))}
-    </section>
+    </div>
   )
 }
 
